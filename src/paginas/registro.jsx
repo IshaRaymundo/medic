@@ -25,6 +25,7 @@ const Registro = () => {
       const response = await axios.post('http://localhost:8083/registrarUsuario', formData);
       console.log(response.data);
       setRegistroExitoso(true);
+    
     } catch (error) {
       console.error(error);
     }
@@ -93,7 +94,14 @@ const Registro = () => {
               Registrarse
             </button>
           </form>
-          <hr className="my-6 border-gray-300 w-full" />
+          <button
+  
+          >
+            <div className="flex items-center justify-center">
+             
+              
+            </div>
+          </button>
           <p className="mt-8">
             ¿Ya tienes una cuenta?{' '}
             <a href="/login" className="text-blue-500 hover:text-blue-700 font-semibold">

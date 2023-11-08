@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Modal = ({ onClose }) => {
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(true); // Initialize the modal as open
     const [nombresDisponibles, setNombresDisponibles] = useState([]);
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
@@ -20,10 +20,6 @@ const Modal = ({ onClose }) => {
             });
     }, []);
 
-    const openModal = () => {
-        setShowModal(true);
-    };
-
     const closeModal = () => {
         setShowModal(false);
     };
@@ -39,9 +35,6 @@ const Modal = ({ onClose }) => {
 
     return (
         <div>
-            <button className="btn btn-primary" onClick={openModal}>
-                Agregar Medicamento
-            </button>
             {showModal && (
                 <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
                     <div className="modal-dialog" role="document">
@@ -70,7 +63,6 @@ const Modal = ({ onClose }) => {
                                             : null}
                                     </select>
                                 </div>
-                                
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-danger" onClick={closeModal}>

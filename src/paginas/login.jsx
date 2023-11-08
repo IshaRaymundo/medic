@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import firebase from 'firebase/compat/app'; 
-import 'firebase/compat/auth'; 
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 import { dbFirebase } from '../bd/firebase';
 import axios from 'axios';
 
@@ -19,7 +19,7 @@ const LoginForm = () => {
       });
 
       if (response.data.mensaje) {
-        // Autenticación exitosa, puedes redirigir al usuario o realizar otras acciones aquí.
+ 
         alert('Autenticación exitosa');
       } else {
         setError('Credenciales incorrectas');
@@ -33,9 +33,10 @@ const LoginForm = () => {
   const handleGoogleSignIn = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    firebase.auth().signInWithPopup(provider)
+    firebase.auth()
+      .signInWithPopup(provider)
       .then((result) => {
-        // Aquí puedes manejar la autenticación exitosa con Google si es necesario.
+      
       })
       .catch((error) => {
         console.error('Error al iniciar sesión con Google:', error);
@@ -48,8 +49,7 @@ const LoginForm = () => {
         <img src="https://img.freepik.com/vector-premium/medicamentos-tarro-tabletas-pildoras-dibujos-animados_480044-1553.jpg?w=2000" alt="" className="w-full h-full object-cover" />
       </div>
 
-      <div className="bg-white w-full md:max-w-md lg:max-w-full md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
-        flex items-center justify-center">
+      <div className="bg-white w-full md:max-w-md lg:max-w-full md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
         <div className="w-full h-100">
           <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Ingresa a tu cuenta</h1>
           <form className="mt-6" onSubmit={handleSignIn}>
@@ -105,7 +105,7 @@ const LoginForm = () => {
                 className="w-6 h-6"
                 viewBox="0 0 48 48"
               >
-                {/* Aquí puedes colocar tu icono de Google */}
+            
               </svg>
               <span className="ml-4">Ingresa con Google</span>
             </div>
