@@ -1,83 +1,98 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 
-const Modal = ({ onClose }) => {
-    const [showModal, setShowModal] = useState(true); // Initialize the modal as open
-    const [nombresDisponibles, setNombresDisponibles] = useState([]);
-    const [nombre, setNombre] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [formula, setFormula] = useState('');
-    const [metodoAdministracion, setMetodoAdministracion] = useState('');
-    const [indicaciones, setIndicaciones] = useState('');
-
-    useEffect(() => {
-        fetch('http://localhost:8083/obtenerNombreMedicamentos')
-            .then((response) => response.json())
-            .then((data) => {
-                setNombresDisponibles(data.nombresMedicamentos);
-            })
-            .catch((error) => {
-                console.error('Error al cargar nombres desde la base de datos', error);
-            });
-    }, []);
-
-    const closeModal = () => {
-        setShowModal(false);
-    };
-
-    const handleSave = () => {
-        console.log('Nombre:', nombre);
-        console.log('Descripción:', descripcion);
-        console.log('Fórmula:', formula);
-        console.log('Método de Administración:', metodoAdministracion);
-        console.log('Indicaciones:', indicaciones);
-        closeModal();
-    };
+const MedicationModal = ({
+    showModal,
+    setShowModal,
+    inputValues,
+    suggestedMedicamentos,
+    handleInputChange,
+    handleSaveMedication,
+}) => {
+    const isSaveButtonDisabled = !(
+        inputValues.nombre &&
+        inputValues.dosis &&
+        inputValues.frecuencia &&
+        inputValues.duracion
+    );
 
     return (
-        <div>
-            {showModal && (
-                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Ingrese los datos</h5>
-                                <button type="button" className="close" onClick={closeModal}>
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <div className="form-group">
-                                    <label>Nombre</label>
-                                    <select
-                                        className="form-control"
-                                        value={nombre}
-                                        onChange={(e) => setNombre(e.target.value)}
-                                    >
-                                        <option value="">Selecciona un nombre</option>
-                                        {nombresDisponibles
-                                            ? nombresDisponibles.map((nombre) => (
-                                                <option key={nombre} value={nombre}>
-                                                    {nombre}
-                                                </option>
-                                            ))
-                                            : null}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-danger" onClick={closeModal}>
-                                    Cerrar
-                                </button>
-                                <button type="button" className="btn btn-primary" onClick={handleSave}>
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+                <Modal.Title>Agregar Medicamento</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                    <Form.Group controlId="nombre">
+                        <Form.Label>Nombre del Medicamento</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="nombre"
+                            value={inputValues.nombre || ''}
+                            onChange={(event) => handleInputChange(event, 'nombre')}
+                            list="medicamentos"
+                        />
+                        <datalist id="medicamentos">
+                            {suggestedMedicamentos.map((med, index) => (
+                                <option key={index} value={med} />
+                            ))}
+                        </datalist>
+                    </Form.Group>
+                    <Form.Group controlId="dosis">
+                        <Form.Label>Dosis del Medicamento</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="dosis"
+                            value={inputValues.dosis || ''}
+                            onChange={(event) => handleInputChange(event, 'dosis')}
+                            min="1"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="frecuencia">
+                        <Form.Label>Frecuencia en que se tomará el Medicamento</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="frecuencia"
+                            value={inputValues.frecuencia || ''}
+                            onChange={(event) => handleInputChange(event, 'frecuencia')}
+                            min="1" // Mínimo valor permitido
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="duracion">
+                        <Form.Label>Durante cuantos días</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="duracion"
+                            value={inputValues.duracion || ''}
+                            onChange={(event) => handleInputChange(event, 'duracion')}
+                            min="1"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="soloParaMalestar">
+                        <Form.Check
+                            type="checkbox"
+                            label="Solo para cuando esté mal"
+                            name="soloParaMalestar"
+                            checked={inputValues.soloParaMalestar || false}
+                            onChange={(event) => handleInputChange(event, 'soloParaMalestar')}
+                        />
+                    </Form.Group>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={() => setShowModal(false)}>
+                    Cerrar
+                </Button>
+                <Button
+                    variant="primary"
+                    onClick={handleSaveMedication}
+                    disabled={isSaveButtonDisabled}
+                >
+                    Guardar
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
 
-export default Modal;
+export default MedicationModal;
