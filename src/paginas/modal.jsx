@@ -40,7 +40,7 @@ const Modal = ({ onClose }) => {
     return (
         <div>
             <button className="btn btn-primary" onClick={openModal}>
-                Abrir Modal
+                Agregar Medicamento
             </button>
             {showModal && (
                 <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>

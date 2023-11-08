@@ -1,6 +1,7 @@
-import Login from './paginas/login';
-import Registro from './paginas/registro';
-import MedicationTable from './paginas/registroMed';
+import Modal from './paginas/Modal';
+import Login from './paginas/Login';
+import Registro from './paginas/Registro';
+import MedicationTable from './paginas/RegistroMed';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes }  from 'react-router-dom';
 
@@ -9,9 +10,10 @@ function App() {
     
     <Router>
       <Routes>
-        <Route path='/login' element={<Login/>} />
-        <Route path='/medicinas' element={<MedicationTable/>} />
-        <Route path='/registro' element={<Registro/>} />
+        <Route path='/Login' element={<Login/>} />
+        <Route path='/' element={<MedicationTable/>} />
+        <Route path='/Registro' element={<Registro/>} />
+        <Route path='/Modal' element={<Modal/>} />
       </Routes>
     </Router>
 

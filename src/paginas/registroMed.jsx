@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FaSun, FaMoon, FaClock } from 'react-icons/fa';
 import { MdRotateRight } from 'react-icons/md';
 import axios from 'axios';
-import Modal from './modal';
-import Navbar from '../componente/Navbar';
+import Modal from './Modal';
+import Navbar from './Navbar';
 
-<Modal></Modal>
 const Tabla = () => {
     const [medicamentos, setMedicamentos] = useState([]);
     const [inputValues, setInputValues] = useState({});
@@ -19,6 +18,10 @@ const Tabla = () => {
             })
             .catch(error => console.log(error));
     }, []);
+
+    const handleOpenModal = () => {
+        setModalOpen(true);
+    }
 
     const searchMedicamento = (query) => {
         return medicamentos.filter(medicamento => medicamento.nombre.toLowerCase().includes(query.toLowerCase()));
@@ -35,6 +38,15 @@ const Tabla = () => {
 
     const selectMedicamento = (medicamento, header, timeLabel, idx) => {
         const cellKey = `${header}${timeLabel}${idx}`;
+        setInputValues(prevValues => ({
+            ...prevValues,
+            [cellKey]: medicamento.nombre
+        }));
+        setActiveCell(null);
+    };
+
+    const addMedicationToTable = (medicamento) => {
+        const cellKey = activeCell;
         setInputValues(prevValues => ({
             ...prevValues,
             [cellKey]: medicamento.nombre
@@ -101,71 +113,80 @@ const Tabla = () => {
 
     return (
         <>
-        <Navbar/>
-
-        <div style={styles.container}>
-            <div style={styles.title}>CUADRO DE MEDICAMENTOS</div>
-            {isModalOpen && <Modal onClose={() => setModalOpen(false)} />}
-            <table style={styles.table}>
-                <thead>
-                    <tr>
-                        <th style={styles.th}></th>
-                        {columnHeaders.map(header => (
-                            <th style={styles.th} key={header}>{header}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {timeData.map(time => (
-                        <tr key={time.label} style={{ backgroundColor: time.color }}>
-                            <td style={styles.td}>
-                                {time.icon}
-                                <span style={{ color: '#555555', fontWeight: 'bold' }}>{time.label}</span>
-                            </td>
+            <Navbar/>
+            <div style={styles.container}>
+                <div style={styles.title}>CUADRO DE MEDICAMENTOS</div>
+                {isModalOpen ? (
+                    <Modal onClose={() => setModalOpen(false)} addMedicationToTable={addMedicationToTable} />
+                ) : (
+                    <div style={{ textAlign: 'center' }}>
+                        <button
+                            style={{ backgroundColor: 'blue', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}
+                            onClick={handleOpenModal}
+                        >
+                            Lista
+                        </button>
+                    </div>
+                )}
+                <table style={styles.table}>
+                    <thead>
+                        <tr>
+                            <th style={styles.th}></th>
                             {columnHeaders.map(header => (
-                                <td style={styles.td} key={header}>
-                                    <div style={{ overflow: matchedMedicamentos.length > 3 ? 'auto' : 'hidden', maxHeight: '120px' }}>
-                                        {[...Array(4)].map((_, idx) => (
-                                            <div key={idx} style={{ position: 'relative' }}>
-                                                <input
-                                                    type="text"
-                                                    style={styles.inputField}
-                                                    value={inputValues[`${header}${time.label}${idx}`] || ''}
-                                                    onChange={event => handleInputChange(event, header, time.label, idx)}
-                                                    onFocus={() => setActiveCell(`${header}${time.label}${idx}`)}
-                                                    onBlur={() => setTimeout(() => setActiveCell(null), 150)}
-                                                />
-                                                {activeCell === `${header}${time.label}${idx}` && matchedMedicamentos.length > 0 && (
-                                                    <div style={{
-                                                        position: 'absolute',
-                                                        backgroundColor: 'white',
-                                                        border: '1px solid #ccc',
-                                                        padding: '10px',
-                                                        zIndex: 1000,
-                                                    }}>
-                                                        {matchedMedicamentos.map(med => (
-                                                            <div
-                                                                key={med.id}
-                                                                onClick={() => selectMedicamento(med, header, time.label, idx)}
-                                                            >
-                                                                {med.nombre}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </td>
+                                <th style={styles.th} key={header}>{header}</th>
                             ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        {timeData.map(time => (
+                            <tr key={time.label} style={{ backgroundColor: time.color }}>
+                                <td style={styles.td}>
+                                    {time.icon}
+                                    <span style={{ color: '#555555', fontWeight: 'bold' }}>{time.label}</span>
+                                </td>
+                                {columnHeaders.map(header => (
+                                    <td style={styles.td} key={header}>
+                                        <div style={{ overflow: matchedMedicamentos.length > 3 ? 'auto' : 'hidden', maxHeight: '120px' }}>
+                                            {[...Array(4)].map((_, idx) => (
+                                                <div key={idx} style={{ position: 'relative' }}>
+                                                    <input
+                                                        type="text"
+                                                        style={styles.inputField}
+                                                        value={inputValues[`${header}${time.label}${idx}`] || ''}
+                                                        onChange={event => handleInputChange(event, header, time.label, idx)}
+                                                        onFocus={() => setActiveCell(`${header}${time.label}${idx}`)}
+                                                        onBlur={() => setTimeout(() => setActiveCell(null), 150)}
+                                                    />
+                                                    {activeCell === `${header}${time.label}${idx}` && matchedMedicamentos.length > 0 && (
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            backgroundColor: 'white',
+                                                            border: '1px solid #ccc',
+                                                            padding: '10px',
+                                                            zIndex: 1000,
+                                                        }}>
+                                                            {matchedMedicamentos.map(med => (
+                                                                <div
+                                                                    key={med.id}
+                                                                    onClick={() => selectMedicamento(med, header, time.label, idx)}
+                                                                >
+                                                                    {med.nombre}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </>
     );
 };
-
 
 export default Tabla;
