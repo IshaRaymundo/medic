@@ -10,11 +10,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/Login' element={<LoginForm/>} /> {/* Cambia a 'LoginForm' */}
         <Route path='/Navbar' element={<Navbar/>} /> {/* Cambia a 'Tabla' */}
-        <Route path='/' element={<MedicationChart/>} /> {/* Cambia a 'Tabla' */}
+        <Route path='/' element={<LoginForm/>} /> {/* Cambia a 'Tabla' */}
         <Route path='/Registro' element={<Registro/>} /> {/* Cambia a 'Registro' */}
         <Route path='/Modal' element={<MedicationModal/>} />
+        <Route path='/Tabla' element={<MedicationChart/>} />
       </Routes>
     </Router>
   );

@@ -34,7 +34,7 @@ const Registro = () => {
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
       <div className=" hidden lg:block w-full md:w-1/2 xl:w-1/2 h-screen">
-        <img src="https://img.freepik.com/vector-premium/pildoras-medicamentos-liquidos-ninos-kawaii-doodle-ilustracion-vectorial-plana_609998-86.jpg" alt="" className="w-full h-full object-cover" />
+        <img src="https://cdn.leonardo.ai/users/027a2ee3-7172-4f83-8013-09b1f64e97e9/generations/c722cf9f-1755-47e2-88a8-98cf555841bd/Leonardo_Diffusion_XL_Una_imagen_llamativa_y_minimalista_para_2.jpg" alt="" className="w-full h-full object-cover" />
       </div>
       <div className="bg-white w-full md:max-w-md lg:max-w-full md:w-2/3 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
         flex items-center justify-center">
@@ -104,7 +104,7 @@ const Registro = () => {
           </button>
           <p className="mt-8">
             ¿Ya tienes una cuenta?{' '}
-            <a href="/login" className="text-blue-500 hover:text-blue-700 font-semibold">
+            <a href="/" className="text-blue-500 hover:text-blue-700 font-semibold">
               Ingresa
             </a>
           </p>

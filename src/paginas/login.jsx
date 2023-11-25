@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate  } from 'react-router-dom'; 
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { dbFirebase } from '../bd/firebase';
@@ -8,6 +9,9 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(''); 
+
+  const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -19,13 +23,16 @@ const LoginForm = () => {
       });
 
       if (response.data.mensaje) {
- 
-        alert('Autenticación exitosa');
+        setSuccessMessage('Autenticación exitosa'); 
+        setError(null);
+        navigate('/Tabla');
       } else {
         setError('Credenciales incorrectas');
+        setSuccessMessage(''); 
       }
     } catch (error) {
       setError('Error al iniciar sesión');
+      setSuccessMessage(''); 
       console.error(error);
     }
   };
@@ -36,7 +43,7 @@ const LoginForm = () => {
     firebase.auth()
       .signInWithPopup(provider)
       .then((result) => {
-      
+        navigate('/Tabla');
       })
       .catch((error) => {
         console.error('Error al iniciar sesión con Google:', error);
@@ -46,7 +53,7 @@ const LoginForm = () => {
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
       <div className="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-1/2 h-screen">
-        <img src="https://img.freepik.com/vector-premium/medicamentos-tarro-tabletas-pildoras-dibujos-animados_480044-1553.jpg?w=2000" alt="" className="w-full h-full object-cover" />
+        <img src="https://cdn.leonardo.ai/users/027a2ee3-7172-4f83-8013-09b1f64e97e9/generations/c722cf9f-1755-47e2-88a8-98cf555841bd/Leonardo_Diffusion_XL_Una_imagen_llamativa_y_minimalista_para_0.jpg" alt="" className="w-full h-full object-cover" />
       </div>
 
       <div className="bg-white w-full md:max-w-md lg:max-w-full md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
@@ -92,6 +99,9 @@ const LoginForm = () => {
           {error && (
             <div className="text-red-500 mt-4">{error}</div>
           )}
+          {successMessage && ( 
+        <div className="text-green-500 mt-4">{successMessage}</div>
+      )}
           <hr className="my-6 border-gray-300 w-full" />
           <button
             type="button"
